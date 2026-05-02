@@ -72,9 +72,8 @@ export const GroupService = {
           email,
           full_name
         )
-      `) as any
       .eq('group_id', groupId)
-      .order('is_active', { ascending: false });
+      .order('is_active', { ascending: false }) as any;
 
     if (error) throw error;
     return data;
