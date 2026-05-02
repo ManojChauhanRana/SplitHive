@@ -44,7 +44,7 @@ export const BalanceService = {
         profiles:user_id (email, full_name),
         added_by_profile:created_by (full_name, email)
       `)
-      .eq('group_id', groupId);
+      .eq('group_id', groupId) as any;
 
     if (memError) throw memError;
 
@@ -60,7 +60,7 @@ export const BalanceService = {
     const { data: participants, error: partError } = await supabase
       .from('expense_participants')
       .select('user_id, share_amount, expense:expense_id!inner(group_id)')
-      .eq('expense.group_id', groupId);
+      .eq('expense.group_id', groupId) as any;
 
     if (partError) throw partError;
 
@@ -162,9 +162,9 @@ export const BalanceService = {
     // 2. Fetch all relevant data for these groups
     const [expenses, participants, settlements, profiles] = await Promise.all([
       supabase.from('expenses').select('id, group_id, paid_by, total_amount').in('group_id', groupIds),
-      supabase.from('expense_participants').select('expense_id, user_id, share_amount, expense:expense_id!inner(group_id, paid_by)').in('expense.group_id', groupIds),
-      supabase.from('settlements').select('payer_id, receiver_id, amount').in('group_id', groupIds),
-      supabase.from('profiles').select('id, full_name, email')
+      supabase.from('expense_participants').select('expense_id, user_id, share_amount, expense:expense_id!inner(group_id, paid_by)').in('expense.group_id', groupIds) as any,
+      supabase.from('settlements').select('payer_id, receiver_id, amount').in('group_id', groupIds) as any,
+      supabase.from('profiles').select('id, full_name, email') as any
     ]);
 
     if (expenses.error) throw expenses.error;

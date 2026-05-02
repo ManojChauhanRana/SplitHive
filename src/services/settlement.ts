@@ -41,7 +41,7 @@ export const SettlementService = {
         payer:payer_id (id, email, full_name),
         receiver:receiver_id (id, email, full_name),
         creator:created_by (id, email, full_name)
-      `)
+      `) as any
       .eq('group_id', groupId)
       .order('created_at', { ascending: false });
 

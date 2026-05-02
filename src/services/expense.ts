@@ -74,7 +74,7 @@ export const ExpenseService = {
         paid_by_profile:paid_by (*),
         created_by_profile:created_by (*),
         expense_participants (*)
-      `)
+      `) as any
       .eq('group_id', groupId)
       .order('created_at', { ascending: false });
 
@@ -101,7 +101,7 @@ export const ExpenseService = {
         *,
         paid_by_profile:paid_by (*),
         group:group_id (name)
-      `)
+      `) as any
       .in('group_id', groupIds)
       .order('created_at', { ascending: false });
 

@@ -189,6 +189,32 @@ export interface Database {
           updated_at?: string
         }
       }
+      group_invites: {
+        Row: {
+          id: string
+          group_id: string
+          email: string
+          invited_by: string
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          group_id: string
+          email: string
+          invited_by: string
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          group_id?: string
+          email?: string
+          invited_by?: string
+          status?: string
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
