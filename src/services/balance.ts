@@ -36,7 +36,7 @@ export const BalanceService = {
 
     // 2. JS Fallback Aggregation
     // Step A: Get all members
-    const { data: members, error: memError } = await supabase
+    const { data: members, error: memError } = await (supabase as any)
       .from('group_members')
       .select(`
         user_id,
@@ -49,7 +49,7 @@ export const BalanceService = {
     if (memError) throw memError;
 
     // Step B: Get all expenses for paid_by totals
-    const { data: expenses, error: expError } = await supabase
+    const { data: expenses, error: expError } = await (supabase as any)
       .from('expenses')
       .select('paid_by, total_amount')
       .eq('group_id', groupId);
@@ -57,7 +57,7 @@ export const BalanceService = {
     if (expError) throw expError;
 
     // Step C: Get all participants for share totals
-    const { data: participants, error: partError } = await supabase
+    const { data: participants, error: partError } = await (supabase as any)
       .from('expense_participants')
       .select('user_id, share_amount, expense:expense_id!inner(group_id)')
       .eq('expense.group_id', groupId) as any;
@@ -67,7 +67,7 @@ export const BalanceService = {
     if (partError) throw partError;
 
     // Step D: Get all settlements
-    const { data: settlements, error: setError } = await supabase
+    const { data: settlements, error: setError } = await (supabase as any)
       .from('settlements')
       .select('payer_id, receiver_id, amount')
       .eq('group_id', groupId);
@@ -110,7 +110,7 @@ export const BalanceService = {
    */
   async getUserDashboardStats(userId: string): Promise<{ totalBalance: number; youOwe: number; youAreOwed: number }> {
     // 1. Get all groups user is part of
-    const { data: userGroups, error: groupsError } = await supabase
+    const { data: userGroups, error: groupsError } = await (supabase as any)
       .from('group_members')
       .select('group_id')
       .eq('user_id', userId);
@@ -149,7 +149,7 @@ export const BalanceService = {
    */
   async getDetailedUserBalances(userId: string) {
     // 1. Get all groups user is part of
-    const { data: userGroups, error: groupsError } = await supabase
+    const { data: userGroups, error: groupsError } = await (supabase as any)
       .from('group_members')
       .select('group_id')
       .eq('user_id', userId);

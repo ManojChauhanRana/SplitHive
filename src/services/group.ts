@@ -10,7 +10,7 @@ export const GroupService = {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('User not authenticated');
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('group_members')
       .select(`
         group_id,
@@ -31,7 +31,7 @@ export const GroupService = {
     await AuthService.ensureProfile(user);
 
     // 1. Create the group
-    const { data: group, error: groupError } = await supabase
+    const { data: group, error: groupError } = await (supabase as any)
       .from('groups')
       .insert({
         name,
@@ -43,7 +43,7 @@ export const GroupService = {
     if (groupError) throw groupError;
 
     // 2. Add the creator as the first member
-    const { error: memberError } = await supabase
+    const { error: memberError } = await (supabase as any)
       .from('group_members')
       .insert({
         group_id: group.id,
@@ -56,7 +56,7 @@ export const GroupService = {
   },
 
   async getGroupMembers(groupId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('group_members')
       .select(`
         user_id,
@@ -81,7 +81,7 @@ export const GroupService = {
   },
 
   async getPendingInvites(groupId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('group_invites')
       .select('id, email, status, created_at')
       .eq('group_id', groupId)
@@ -95,7 +95,7 @@ export const GroupService = {
     const normalizedEmail = email.trim().toLowerCase();
 
     // 1. Check if user exists in profiles
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await (supabase as any)
       .from('profiles')
       .select('id')
       .eq('email', normalizedEmail)
@@ -104,7 +104,7 @@ export const GroupService = {
     if (profile && !profileError) {
       // User exists - add them directly
       const { data: { user: currentUser } } = await supabase.auth.getUser();
-      const { error: memberError } = await supabase
+      const { error: memberError } = await (supabase as any)
         .from('group_members')
         .insert([
           { 
@@ -140,7 +140,7 @@ export const GroupService = {
   },
 
   async updateMemberStatus(groupId: string, userId: string, isActive: boolean) {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('group_members')
       .update({ is_active: isActive })
       .eq('group_id', groupId)

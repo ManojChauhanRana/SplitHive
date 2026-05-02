@@ -28,7 +28,7 @@ export const ExpenseService = {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('User not authenticated');
 
-    const { data: expense, error: expenseError } = await supabase
+    const { data: expense, error: expenseError } = await (supabase as any)
       .from('expenses')
       .insert({
         group_id: data.groupId,
@@ -53,7 +53,7 @@ export const ExpenseService = {
       is_paid: false, // Default to false
     }));
 
-    const { error: participantError } = await supabase
+    const { error: participantError } = await (supabase as any)
       .from('expense_participants')
       .insert(participants);
 
@@ -67,7 +67,7 @@ export const ExpenseService = {
   },
 
   async getGroupExpenses(groupId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('expenses')
       .select(`
         *,
@@ -83,7 +83,7 @@ export const ExpenseService = {
 
   async getUserExpenses(userId: string) {
     // Get all groups user is part of
-    const { data: userGroups, error: groupsError } = await supabase
+    const { data: userGroups, error: groupsError } = await (supabase as any)
       .from('group_members')
       .select('group_id')
       .eq('user_id', userId);
@@ -94,7 +94,7 @@ export const ExpenseService = {
 
     const groupIds = userGroups.map(g => g.group_id);
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('expenses')
       .select(`
         *,

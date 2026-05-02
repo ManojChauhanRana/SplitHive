@@ -17,7 +17,7 @@ export const SettlementService = {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('User not authenticated');
 
-    const { data: settlement, error } = await supabase
+    const { data: settlement, error } = await (supabase as any)
       .from('settlements')
       .insert({
         group_id: data.groupId,
@@ -34,7 +34,7 @@ export const SettlementService = {
   },
 
   async getGroupSettlements(groupId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('settlements')
       .select(`
         *,
