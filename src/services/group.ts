@@ -72,6 +72,7 @@ export const GroupService = {
           email,
           full_name
         )
+      `)
       .eq('group_id', groupId)
       .order('is_active', { ascending: false }) as any;
 
