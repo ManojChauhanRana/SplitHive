@@ -1,4 +1,4 @@
-import { ArrowLeft, Plus, Receipt, User as UserIcon, Calendar, Info, TrendingUp, TrendingDown, CheckCircle2, Image as ImageIcon, X, ExternalLink, UserX, UserCheck, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, Plus, Receipt, Calendar, TrendingUp, TrendingDown, CheckCircle2, Image as ImageIcon, X, ExternalLink, UserX, UserCheck } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';

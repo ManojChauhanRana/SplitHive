@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
   TrendingUp, TrendingDown, Wallet, Users, Receipt, ArrowRight, 
-  Activity, Filter, BarChart3, PieChart as PieIcon, Calendar,
   ArrowUpRight, ArrowDownLeft, ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -28,8 +27,8 @@ export const Dashboard: React.FC = () => {
   // Filters
   const [filterType, setFilterType] = useState<'all' | 'month' | 'week' | 'day' | 'custom'>('month');
   const [selectedGroupId, setSelectedGroupId] = useState<string>('all');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate] = useState('');
+  const [endDate] = useState('');
   const [chartView, setChartView] = useState<'bar' | 'pie'>('bar');
 
   useEffect(() => {
@@ -259,7 +258,7 @@ export const Dashboard: React.FC = () => {
                       animationBegin={0}
                       animationDuration={1500}
                     >
-                      {spendingData.slice(0, 10).map((entry, index) => (
+                      {spendingData.slice(0, 10).map((_entry: any, index: number) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
                       ))}
                     </Pie>

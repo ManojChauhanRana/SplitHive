@@ -19,7 +19,7 @@ export const BalanceService = {
   async getGroupBalances(groupId: string): Promise<UserBalance[]> {
     try {
       // 1. Try using the optimized RPC function first
-      const { data, error } = await supabase.rpc('get_group_balances', {
+      const { data, error } = await (supabase as any).rpc('get_group_balances', {
         p_group_id: groupId
       });
 
@@ -75,7 +75,7 @@ export const BalanceService = {
     if (setError) throw setError;
 
     // Step E: Calculate
-    return members.map(m => {
+    return members.map((m: any) => {
       const paid = expenses
         .filter((e: any) => e.paid_by === m.user_id)
         .reduce((sum: number, e: any) => sum + Number(e.total_amount), 0);

@@ -47,7 +47,7 @@ export const AddExpense: React.FC = () => {
           full_name: m.profiles.full_name || m.profiles.email
         }));
       setMembers(formattedMembers);
-      setSelectedIds(formattedMembers.map(m => m.id)); // Default to split with everyone
+      setSelectedIds(formattedMembers.map((m: any) => m.id)); // Default to split with everyone
       setLoading(false);
     } catch (error) {
       console.error('Error fetching group details:', error);

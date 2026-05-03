@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
   PieChart, Pie, Legend
 } from 'recharts';
-import { Calendar, Filter, PieChart as PieIcon, BarChart3, TrendingUp, Users } from 'lucide-react';
+import { Filter, PieChart as PieIcon, BarChart3, Users } from 'lucide-react';
 
 interface GroupAnalyticsProps {
   expenses: any[];
@@ -12,7 +12,7 @@ interface GroupAnalyticsProps {
 
 const COLORS = ['#eab308', '#f97316', '#ef4444', '#ec4899', '#a855f7', '#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#84cc16'];
 
-export const GroupAnalytics: React.FC<GroupAnalyticsProps> = ({ expenses, members }) => {
+export const GroupAnalytics: React.FC<GroupAnalyticsProps> = ({ expenses, members: _members }) => {
   const [chartView, setChartView] = useState<'bar' | 'pie'>('bar');
   const [filterType, setFilterType] = useState<'all' | 'week' | 'month' | 'custom'>('all');
   const [startDate, setStartDate] = useState('');
@@ -39,6 +39,10 @@ export const GroupAnalytics: React.FC<GroupAnalyticsProps> = ({ expenses, member
     });
   }, [expenses, filterType, startDate, endDate]);
 
+  const totalSpent = useMemo(() => {
+    return filteredExpenses.reduce((sum, exp) => sum + Number(exp.total_amount), 0);
+  }, [filteredExpenses]);
+
   const memberSpendingData = useMemo(() => {
     const spending: Record<string, number> = {};
     filteredExpenses.forEach(exp => {
@@ -51,10 +55,6 @@ export const GroupAnalytics: React.FC<GroupAnalyticsProps> = ({ expenses, member
       percent: totalSpent > 0 ? ((amount / totalSpent) * 100).toFixed(1) : 0
     }));
   }, [filteredExpenses, totalSpent]);
-
-  const totalSpent = useMemo(() => {
-    return filteredExpenses.reduce((sum, exp) => sum + Number(exp.total_amount), 0);
-  }, [filteredExpenses]);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -177,7 +177,7 @@ export const GroupAnalytics: React.FC<GroupAnalyticsProps> = ({ expenses, member
                     padding: '12px'
                   }}
                   itemStyle={{ color: '#eab308', fontWeight: '900', fontSize: '14px' }}
-                  formatter={(value, name, props) => [`₹${value} (${props.payload.percent}%)`, name]}
+                  formatter={(value, name, props: any) => [`₹${value} (${props.payload.percent}%)`, name]}
                 />
                 <Bar dataKey="amount" fill="#eab308" radius={[10, 10, 0, 0]} barSize={50} />
               </BarChart>
@@ -192,7 +192,7 @@ export const GroupAnalytics: React.FC<GroupAnalyticsProps> = ({ expenses, member
                   paddingAngle={5}
                   dataKey="amount"
                 >
-                  {memberSpendingData.map((entry, index) => (
+                  {memberSpendingData.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="transparent" />
                   ))}
                 </Pie>
