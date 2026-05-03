@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
-  TrendingUp, TrendingDown, Wallet, Users, Receipt, ArrowRight, 
+  TrendingUp, TrendingDown, Users, Receipt, ArrowRight, 
+  Activity, Filter, BarChart3, PieChart as PieIcon,
   ArrowUpRight, ArrowDownLeft, ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
