@@ -81,16 +81,16 @@ export const BalanceService = {
         .reduce((sum, e) => sum + Number(e.total_amount), 0);
 
       const share = participants
-        .filter(p => p.user_id === m.user_id)
-        .reduce((sum, p) => sum + Number(p.share_amount), 0);
+        .filter((p: any) => p.user_id === m.user_id)
+        .reduce((sum: number, p: any) => sum + Number(p.share_amount), 0);
 
       const settlementsPaid = settlements
-        .filter(s => s.payer_id === m.user_id)
-        .reduce((sum, s) => sum + Number(s.amount), 0);
+        .filter((s: any) => s.payer_id === m.user_id)
+        .reduce((sum: number, s: any) => sum + Number(s.amount), 0);
       
       const settlementsReceived = settlements
-        .filter(s => s.receiver_id === m.user_id)
-        .reduce((sum, s) => sum + Number(s.amount), 0);
+        .filter((s: any) => s.receiver_id === m.user_id)
+        .reduce((sum: number, s: any) => sum + Number(s.amount), 0);
 
       return {
         user_id: m.user_id,
@@ -123,11 +123,11 @@ export const BalanceService = {
     // 2. For each group, get the balance for this specific user
     // In a real production app, we would write a single SQL query for this
     // but for now, we leverage the existing logic
-    const balancePromises = userGroups.map(g => this.getGroupBalances(g.group_id));
+    const balancePromises = userGroups.map((g: any) => this.getGroupBalances(g.group_id));
     const allBalances = await Promise.all(balancePromises);
 
     allBalances.forEach(groupBalance => {
-      const userBalance = groupBalance.find(b => b.user_id === userId);
+      const userBalance = groupBalance.find((b: any) => b.user_id === userId);
       if (userBalance) {
         if (userBalance.net_balance > 0) {
           totalOwed += userBalance.net_balance;
@@ -157,7 +157,7 @@ export const BalanceService = {
     if (groupsError) throw groupsError;
     if (!userGroups || userGroups.length === 0) return { youOwe: [], owesYou: [] };
 
-    const groupIds = userGroups.map(g => g.group_id);
+    const groupIds = userGroups.map((g: any) => g.group_id);
 
     // 2. Fetch all relevant data for these groups
     const [expenses, participants, settlements, profiles] = await Promise.all([
@@ -177,7 +177,7 @@ export const BalanceService = {
     const personBalances: Record<string, number> = {};
 
     // Process expenses where user is participant
-    participants.data.forEach(p => {
+    participants.data.forEach((p: any) => {
       const payerId = p.expense.paid_by;
       const participantId = p.user_id;
 
@@ -191,7 +191,7 @@ export const BalanceService = {
     });
 
     // Process settlements
-    settlements.data.forEach(s => {
+    settlements.data.forEach((s: any) => {
       if (s.payer_id === userId) {
         // User paid someone (reduces what user owes them or increases what they owe user)
         personBalances[s.receiver_id] = (personBalances[s.receiver_id] || 0) + Number(s.amount);
@@ -208,7 +208,7 @@ export const BalanceService = {
     Object.entries(personBalances).forEach(([pid, balance]) => {
       if (Math.abs(balance) < 0.01) return; // Skip tiny balances
 
-      const profile = profiles.data.find(p => p.id === pid);
+      const profile = profiles.data.find((p: any) => p.id === pid);
       const personInfo = {
         user_id: pid,
         full_name: profile?.full_name || profile?.email || 'Unknown',

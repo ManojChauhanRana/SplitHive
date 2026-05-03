@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase';
 import { Database } from '../types/database';
 
-type ExpenseInsert = Database['public']['Tables']['expenses']['Insert'];
+// type ExpenseInsert = Database['public']['Tables']['expenses']['Insert'];
 
 export interface CreateExpenseData {
   groupId: string;
@@ -92,7 +92,7 @@ export const ExpenseService = {
     
     if (!userGroups || userGroups.length === 0) return [];
 
-    const groupIds = userGroups.map(g => g.group_id);
+    const groupIds = userGroups.map((g: any) => g.group_id);
 
     const { data, error } = await (supabase as any)
       .from('expenses')

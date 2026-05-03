@@ -3,7 +3,7 @@ import { AuthService } from './auth';
 import { Database } from '../types/database';
 
 type Group = Database['public']['Tables']['groups']['Row'];
-type NewGroup = Database['public']['Tables']['groups']['Insert'];
+// type NewGroup = Database['public']['Tables']['groups']['Insert'];
 
 export const GroupService = {
   async getGroups() {
@@ -21,7 +21,7 @@ export const GroupService = {
     if (error) throw error;
     
     // Flatten the response to return groups
-    return data.map(item => item.groups) as Group[];
+    return data.map((item: any) => item.groups) as Group[];
   },
 
   async createGroup(name: string) {
