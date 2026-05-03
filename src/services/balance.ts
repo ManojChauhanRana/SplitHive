@@ -77,8 +77,8 @@ export const BalanceService = {
     // Step E: Calculate
     return members.map(m => {
       const paid = expenses
-        .filter(e => e.paid_by === m.user_id)
-        .reduce((sum, e) => sum + Number(e.total_amount), 0);
+        .filter((e: any) => e.paid_by === m.user_id)
+        .reduce((sum: number, e: any) => sum + Number(e.total_amount), 0);
 
       const share = participants
         .filter((p: any) => p.user_id === m.user_id)
