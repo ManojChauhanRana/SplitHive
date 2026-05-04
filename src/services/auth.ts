@@ -51,7 +51,7 @@ export const AuthService = {
     }
   },
 
-  async signUp({ email, password, fullName }: SignupData) {
+  async signUp({ email, password, fullName }: SignupData, redirectTo?: string) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -59,6 +59,7 @@ export const AuthService = {
         data: {
           full_name: fullName,
         },
+        emailRedirectTo: redirectTo || `${window.location.origin}/login`,
       },
     });
     if (error) throw error;
