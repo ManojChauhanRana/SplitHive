@@ -71,7 +71,7 @@ export const ExpenseService = {
       .select(`
         *,
         paid_by_profile:paid_by (*),
-        created_by_profile:created_by (*),
+        created_by_profile:created_by (*)
       `)
       .eq('group_id', groupId)
       .order('created_at', { ascending: false }) as any;
