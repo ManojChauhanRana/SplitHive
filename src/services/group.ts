@@ -81,12 +81,14 @@ export const GroupService = {
   },
 
   async getPendingInvites(groupId: string) {
+    console.log("Fetching pending invites for group:", groupId);
     const { data, error } = await (supabase as any)
       .from('group_invites')
       .select('id, email, status, created_at')
       .eq('group_id', groupId)
       .order('created_at', { ascending: false });
 
+    console.log("Raw group_invites data:", data, "Error:", error);
     if (error) throw error;
     return data ?? [];
   },

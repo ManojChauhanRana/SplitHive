@@ -59,6 +59,7 @@ export const GroupDetail: React.FC = () => {
       setBalances(balanceData);
 
       const inviteData = await GroupService.getPendingInvites(groupId!);
+      console.log("Invite data received in component:", inviteData);
       setPendingInvites(inviteData.filter((invite: any) => invite.status === 'pending'));
 
       const settlementData = await SettlementService.getGroupSettlements(groupId!);
