@@ -3,7 +3,7 @@ import { GroupService } from '../../services/group';
 import { Database } from '../../types/database';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
-import { Plus, Users as UsersIcon, ChevronRight, Loader2 } from 'lucide-react';
+import { Plus, Users as UsersIcon, ChevronRight, Loader2, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 type Group = Database['public']['Tables']['groups']['Row'];
@@ -14,6 +14,12 @@ export const Groups: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
   const [createLoading, setCreateLoading] = useState(false);
+  const [actionMessage, setActionMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
+
+  const showMessage = (text: string, type: 'success' | 'error' = 'success') => {
+    setActionMessage({ text, type });
+    setTimeout(() => setActionMessage(null), 5000);
+  };
 
   useEffect(() => {
     fetchGroups();
@@ -42,7 +48,7 @@ export const Groups: React.FC = () => {
       fetchGroups(); // Refresh list
     } catch (error) {
       console.error('Error creating group:', error);
-      alert('Failed to create group');
+      showMessage('Failed to create group', 'error');
     } finally {
       setCreateLoading(false);
     }
@@ -50,6 +56,14 @@ export const Groups: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      {actionMessage && (
+        <div className={`p-4 rounded-2xl text-sm font-medium flex justify-between items-center animate-in fade-in slide-in-from-top-4 ${actionMessage.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+          <span>{actionMessage.text}</span>
+          <button onClick={() => setActionMessage(null)} className="p-1 hover:bg-black/20 rounded-lg transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Your Groups</h1>

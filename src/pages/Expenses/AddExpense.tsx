@@ -18,6 +18,12 @@ export const AddExpense: React.FC = () => {
   const [members, setMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [actionMessage, setActionMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
+
+  const showMessage = (text: string, type: 'success' | 'error' = 'success') => {
+    setActionMessage({ text, type });
+    setTimeout(() => setActionMessage(null), 5000);
+  };
 
   // Form State
   const [title, setTitle] = useState('');
@@ -75,7 +81,7 @@ export const AddExpense: React.FC = () => {
     e.preventDefault();
     if (!user || !groupId) return;
     if (!title || lineItemsTotal <= 0 || selectedIds.length === 0) {
-      alert('Please fill in all required fields and select at least one member.');
+      showMessage('Please fill in all required fields and select at least one member.', 'error');
       return;
     }
 
@@ -99,7 +105,7 @@ export const AddExpense: React.FC = () => {
       navigate(`/groups/${groupId}`);
     } catch (error: any) {
       console.error('Error adding expense:', error);
-      alert(error.message || 'Failed to add expense');
+      showMessage(error.message || 'Failed to add expense', 'error');
     } finally {
       setSubmitting(false);
     }
@@ -145,7 +151,16 @@ export const AddExpense: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto pb-20">
+      {actionMessage && (
+        <div className={`mb-6 p-4 rounded-2xl text-sm font-medium flex justify-between items-center animate-in fade-in slide-in-from-top-4 ${actionMessage.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+          <span>{actionMessage.text}</span>
+          <button type="button" onClick={() => setActionMessage(null)} className="p-1 hover:bg-black/20 rounded-lg transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+      )}
       <button 
+        type="button"
         onClick={() => navigate(-1)}
         className="flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
       >

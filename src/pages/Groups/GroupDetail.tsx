@@ -31,7 +31,13 @@ export const GroupDetail: React.FC = () => {
   const [settlements, setSettlements] = useState<any[]>([]);
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'expenses' | 'analytics'>('expenses');
+  const [actionMessage, setActionMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
   const { user } = useAuth();
+
+  const showMessage = (text: string, type: 'success' | 'error' = 'success') => {
+    setActionMessage({ text, type });
+    setTimeout(() => setActionMessage(null), 5000);
+  };
 
   useEffect(() => {
     if (groupId) {
@@ -103,7 +109,7 @@ export const GroupDetail: React.FC = () => {
       console.log("Invitation result:", result);
       
       if (result.status === 'invited') {
-        alert(`Invite sent! ${inviteName} will receive an email to join this Hive and set their password.`);
+        showMessage(`Invite sent! ${inviteName} will receive an email to join this Hive and set their password.`);
       } else if (result.status === 'already_member') {
         setInviteError("This user is already a member of this group.");
         setInviteLoading(false);
@@ -142,7 +148,7 @@ export const GroupDetail: React.FC = () => {
       fetchData();
     } catch (error) {
       console.error('Error toggling member status:', error);
-      alert('Failed to update member status');
+      showMessage('Failed to update member status', 'error');
     }
   };
 
@@ -156,6 +162,14 @@ export const GroupDetail: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
+      {actionMessage && (
+        <div className={`p-4 rounded-2xl text-sm font-medium flex justify-between items-center animate-in fade-in slide-in-from-top-4 ${actionMessage.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+          <span>{actionMessage.text}</span>
+          <button onClick={() => setActionMessage(null)} className="p-1 hover:bg-black/20 rounded-lg transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+      )}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-4">
           <button 

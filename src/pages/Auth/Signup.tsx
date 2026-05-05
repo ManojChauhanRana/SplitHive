@@ -9,6 +9,7 @@ import { Button } from '../../components/ui/Button';
 
 export const Signup: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,10 +24,13 @@ export const Signup: React.FC = () => {
   const onSubmit = async (data: SignupData) => {
     setLoading(true);
     setError(null);
+    setSuccess(null);
     try {
       await AuthService.signUp(data);
-      alert('Signup successful! Please check your email for verification.');
-      navigate('/login');
+      setSuccess('Signup successful! Please check your email for verification.');
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
     } catch (err: any) {
       setError(err.message || 'Failed to sign up');
     } finally {
@@ -71,6 +75,12 @@ export const Signup: React.FC = () => {
             {error && (
               <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">
                 {error}
+              </div>
+            )}
+            
+            {success && (
+              <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm">
+                {success}
               </div>
             )}
 
